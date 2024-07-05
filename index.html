@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра с кодом</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="character"></div>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+    </div>
+    <div id="sidebar">
+        <div id="taskContainer">
+            <h2>Задание</h2>
+            <p id="taskDescription">Здесь будет описание задания.</p>
+            <button id="nextTaskButton">Следующее задание</button>
+        </div>
+        <div id="codeEditor">
+            <div id="editor">// Пишите ваш код здесь</div>
+            <button id="runCodeButton">Запустить код</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
