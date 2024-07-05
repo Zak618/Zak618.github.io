@@ -6,6 +6,19 @@
     <title>Создай свой дом</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        h1 {
+            font-weight: 300;
+            margin-top: 50px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+        }
         .task-list {
             margin-top: 20px;
         }
@@ -13,18 +26,23 @@
             display: flex;
             align-items: center;
             margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .task .status {
             margin-right: 10px;
+            font-size: 1.5rem;
         }
         .task.completed .status {
-            color: green;
+            color: #28a745;
         }
         .task.completed .status:before {
             content: '✔️';
         }
         .task.not-completed .status {
-            color: red;
+            color: #dc3545;
         }
         .task.not-completed .status:before {
             content: '❌';
@@ -37,32 +55,34 @@
             height: 150px;
             margin-bottom: 10px;
             font-family: monospace;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .preview {
             border: 1px solid #ddd;
+            border-radius: 10px;
             height: 400px;
             margin-top: 20px;
             position: relative;
-        }
-        .guide {
-            margin-top: 20px;
-        }
-        .guide ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        .guide li {
-            margin-bottom: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .instruction {
             margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .hint {
             display: none;
             margin-top: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f1f3f5;
         }
         .foundation {
             background-color: #8B4513;
@@ -88,23 +108,9 @@
             border-right: 110px solid transparent;
             border-bottom: 100px solid #A52A2A;
             position: absolute;
-            top: -80px;
+            top: 55px;
             left: 50%;
             transform: translateX(-50%);
-        }
-        .window {
-            width: 40px;
-            height: 40px;
-            background-color: #FFF;
-            border: 2px solid #000;
-            position: absolute;
-            top: 30px;
-        }
-        .window.left {
-            left: 20px;
-        }
-        .window.right {
-            right: 20px;
         }
         .door {
             width: 60px;
@@ -130,7 +136,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center mt-5">Создай свой дом</h1>
+        <h1 class="text-center">Создай свой дом</h1>
         <div id="instructions" class="instruction">
             <h2>Шаг 1: Создать фундамент</h2>
             <p>Напишите HTML и CSS код для фундамента. Используйте элемент <code>&lt;div class="foundation"&gt;&lt;/div&gt;</code>.</p>
@@ -165,24 +171,23 @@
                 <div class="status"></div>
                 <div>Построить крышу</div>
             </div>
-            <div class="task not-completed" data-task="windows">
-                <div class="status"></div>
-                <div>Добавить окна</div>
-            </div>
             <div class="task not-completed" data-task="door">
                 <div class="status"></div>
                 <div>Установить дверь</div>
             </div>
         </div>
         <div class="code-area">
-            <textarea id="htmlCode" placeholder="Введите HTML код здесь"></textarea>
-            <textarea id="cssCode" placeholder="Введите CSS код здесь"></textarea>
+            <textarea id="htmlCode" class="form-control" placeholder="Введите HTML код здесь"></textarea>
+            <textarea id="cssCode" class="form-control" placeholder="Введите CSS код здесь"></textarea>
         </div>
         <div class="preview">
             <iframe id="previewFrame" style="width: 100%; height: 100%;"></iframe>
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         let currentStep = 1;
 
@@ -206,7 +211,6 @@
                 { name: 'foundation', htmlCondition: /class="foundation"/, cssCondition: /\.foundation\s*\{[^}]*background-color:\s*#8B4513[^}]*\}/ },
                 { name: 'walls', htmlCondition: /class="walls"/, cssCondition: /\.walls\s*\{[^}]*background-color:\s*#D3D3D3[^}]*\}/ },
                 { name: 'roof', htmlCondition: /class="roof"/, cssCondition: /\.roof\s*\{[^}]*border-bottom:\s*100px\s*solid\s*#A52A2A[^}]*\}/ },
-                { name: 'windows', htmlCondition: /class="window"/, cssCondition: /\.window\s*\{[^}]*background-color:\s*#FFF[^}]*\}/ },
                 { name: 'door', htmlCondition: /class="door"/, cssCondition: /\.door\s*\{[^}]*background-color:\s*#A52A2A[^}]*\}/ }
             ];
 
@@ -277,10 +281,10 @@
                             <li>Левая граница: 110px solid transparent (треугольник)</li>
                             <li>Правая граница: 110px solid transparent (треугольник)</li>
                             <li>Нижняя граница: 100px solid #A52A2A (чтобы создать красную крышу)</li>
-                            <li>Позиционирование: absolute (чтобы закрепить крышу над стенами)</li>
-                            <li>Верхний отступ: -80px (чтобы крыша была на верхушке стен)</li>
-                            <li>Левый отступ: 50% (чтобы центрировать крышу)</li>
-                            <li>Трансформация: translateX(-50%) (чтобы центрировать крышу по горизонтали)</li>
+                            <li>Позиционирование: absolute (чтобы закрепить крышу над стенами)</ли>
+                            <ли>Верхний отступ: 50px (чтобы крыша была на 50 пикселей от верха стены)</ли>
+                            <ли>Левый отступ: 50% (чтобы центрировать крышу)</ли>
+                            <ли>Трансформация: translateX(-50%) (чтобы центрировать крышу по горизонтали)</ли>
                         </ul>
                         <button class="btn btn-secondary" onclick="showHint(3)">Показать помощь</button>
                         <button class="btn btn-secondary" onclick="hideHint(3)" style="display:none;">Скрыть помощь</button>
@@ -291,7 +295,7 @@
     border-right: 110px solid transparent;
     border-bottom: 100px solid #A52A2A;
     position: absolute;
-    top: -80px;
+    top: 55px;
     left: 50%;
     transform: translateX(-50%);
 }</code></pre>
@@ -299,53 +303,21 @@
                     break;
                 case 4:
                     instructions.innerHTML = `
-                        <h2>Шаг 4: Добавить окна</h2>
-                        <p>Напишите HTML код для окон. Используйте элемент <code>&lt;div class="window left"&gt;&lt;/div&gt; и &lt;div class="window right"&gt;&lt;/div&gt;</code>.</p>
-                        <p>CSS должен содержать правила для:</p>
-                        <ul>
-                            <li>Ширина: 40px (ширина окна)</li>
-                            <li>Высота: 40px (высота окна)</li>
-                            <li>Цвет фона: белый (чтобы окно было белым)</li>
-                            <li>Рамка: 2px solid черный (черная рамка вокруг окна)</li>
-                            <li>Позиционирование: absolute (чтобы закрепить окна на стенах)</li>
-                            <li>Верхний отступ: 30px (чтобы окно было на 30 пикселей от верха стены)</li>
-                            <li>Левый отступ: 20px для левого окна и правый отступ: 20px для правого окна (чтобы окна были симметрично расположены)</li>
-                        </ul>
-                        <button class="btn btn-secondary" onclick="showHint(4)">Показать помощь</button>
-                        <button class="btn btn-secondary" onclick="hideHint(4)" style="display:none;">Скрыть помощь</button>
-                        <pre id="hint4" class="hint"><code>.window {
-    width: 40px;
-    height: 40px;
-    background-color: #FFF;
-    border: 2px solid #000;
-    position: absolute;
-    top: 30px;
-}
-.window.left {
-    left: 20px;
-}
-.window.right {
-    right: 20px;
-}</code></pre>
-                    `;
-                    break;
-                case 5:
-                    instructions.innerHTML = `
-                        <h2>Шаг 5: Установить дверь</h2>
+                        <h2>Шаг 4: Установить дверь</h2>
                         <p>Напишите HTML код для двери. Используйте элемент <code>&lt;div class="door"&gt;&lt;/div&gt; с вложенным &lt;div class="doorknob"&gt;&lt;/div&gt;</code>.</p>
-                        <p>CSS должен содержать правила для:</p>
+                        <п>CSS должен содержать правила для:</п>
                         <ul>
                             <li>Ширина: 60px (ширина двери)</li>
-                            <li>Высота: 100px (высота двери)</li>
-                            <li>Цвет фона: темно-коричневый (чтобы дверь была темно-коричневой)</li>
-                            <li>Позиционирование: absolute (чтобы закрепить дверь на стенах)</li>
-                            <li>Нижний отступ: 20px (чтобы дверь была внизу стены)</li>
-                            <li>Левый отступ: 50% (чтобы дверь была по центру стены)</li>
-                            <li>Трансформация: translateX(-50%) (чтобы скорректировать положение двери по центру)</li>
-                        </ul>
-                        <button class="btn btn-secondary" onclick="showHint(5)">Показать помощь</button>
-                        <button class="btn btn-secondary" onclick="hideHint(5)" style="display:none;">Скрыть помощь</button>
-                        <pre id="hint5" class="hint"><code>.door {
+                            <ли>Высота: 100px (высота двери)</ли>
+                            <ли>Цвет фона: темно-коричневый (чтобы дверь была темно-коричневой)</ли>
+                            <ли>Позиционирование: absolute (чтобы закрепить дверь на стенах)</ли>
+                            <ли>Нижний отступ: 20px (чтобы дверь была внизу стены)</ли>
+                            <ли>Левый отступ: 50% (чтобы дверь была по центру стены)</ли>
+                            <ли>Трансформация: translateX(-50%) (чтобы скорректировать положение двери по центру)</ли>
+                        </ул>
+                        <button class="btn btn-secondary" onclick="showHint(4)">Показать помощь</button>
+                        <button class="btn btn-secondary" onclick="hideHint(4)" style="display:none;">Скрыть помощь</button>
+                        <pre id="hint4" class="hint"><code>.door {
     width: 60px;
     height: 100px;
     background-color: #A52A2A;
@@ -367,7 +339,7 @@
 }</code></pre>
                     `;
                     break;
-                case 6:
+                case 5:
                     instructions.innerHTML = `
                         <h2>Поздравляем!</h2>
                         <p>Вы успешно построили дом!</p>
