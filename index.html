@@ -7,20 +7,20 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
         }
         .container {
-            width: 100%;
-            max-width: 800px;
-            margin-top: 20px;
+            display: flex;
+            height: 100vh;
         }
         .code-area {
-            margin-top: 20px;
+            flex: 1;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            box-sizing: border-box;
+            overflow-y: auto;
         }
         .code-area textarea {
             width: 100%;
@@ -29,13 +29,17 @@
             font-family: monospace;
         }
         .preview {
-            border: 1px solid #ddd;
-            height: 300px;
-            margin-top: 20px;
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .preview iframe {
             width: 100%;
+            height: 100%;
+            border: 1px solid #ddd;
         }
         .instruction {
-            margin-top: 20px;
+            margin-bottom: 20px;
             padding: 15px;
             border: 1px solid #ddd;
             background-color: #f9f9f9;
@@ -96,34 +100,33 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center mt-5">Создай свой дом</h1>
-        <div id="instructions" class="instruction">
-            <h2>Шаг 1: Создать фундамент</h2>
-            <p>Напишите HTML и CSS код для фундамента. Используйте элемент <code>&lt;div class="foundation"&gt;&lt;/div&gt;</code>.</p>
-            <p>CSS должен содержать правила для:</p>
-            <ul>
-                <li>Ширина: 100% (чтобы фундамент занимал всю ширину контейнера)</li>
-                <li>Высота: 20px (высота фундамента)</li>
-                <li>Цвет фона: коричневый (чтобы фундамент был коричневым)</li>
-                <li>Позиционирование: absolute (чтобы закрепить фундамент внизу контейнера)</li>
-                <li>Нижний отступ: 0 (чтобы фундамент был внизу контейнера)</li>
-            </ul>
-            <button class="btn btn-secondary" onclick="showHint(1)">Показать помощь</button>
-            <button class="btn btn-secondary" onclick="hideHint(1)" style="display:none;">Скрыть помощь</button>
-            <pre id="hint1" class="hint"><code>.foundation {
+        <div class="code-area">
+            <div id="instructions" class="instruction">
+                <h2>Шаг 1: Создать фундамент</h2>
+                <p>Напишите HTML и CSS код для фундамента. Используйте элемент <code>&lt;div class="foundation"&gt;&lt;/div&gt;</code>.</p>
+                <p>CSS должен содержать правила для:</p>
+                <ul>
+                    <li>Ширина: 100% (чтобы фундамент занимал всю ширину контейнера)</li>
+                    <li>Высота: 20px (высота фундамента)</li>
+                    <li>Цвет фона: коричневый (чтобы фундамент был коричневым)</li>
+                    <li>Позиционирование: absolute (чтобы закрепить фундамент внизу контейнера)</li>
+                    <li>Нижний отступ: 0 (чтобы фундамент был внизу контейнера)</li>
+                </ul>
+                <button class="btn btn-secondary" onclick="showHint(1)">Показать помощь</button>
+                <button class="btn btn-secondary" onclick="hideHint(1)" style="display:none;">Скрыть помощь</button>
+                <pre id="hint1" class="hint"><code>.foundation {
     width: 100%;
     height: 20px;
     background-color: #8B4513;
     position: absolute;
     bottom: 0;
 }</code></pre>
-        </div>
-        <div class="code-area">
+            </div>
             <textarea id="htmlCode" placeholder="Введите HTML код здесь"></textarea>
             <textarea id="cssCode" placeholder="Введите CSS код здесь"></textarea>
         </div>
         <div class="preview">
-            <iframe id="previewFrame" style="width: 100%; height: 100%;"></iframe>
+            <iframe id="previewFrame"></iframe>
         </div>
     </div>
 
