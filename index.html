@@ -5,12 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Создай свой дом</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/foldgutter.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            background-size: 200% 200%;
+            animation: gradientAnimation 10s ease infinite;
             color: #333;
             font-family: 'Helvetica Neue', Arial, sans-serif;
         }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
         h1 {
             font-weight: 300;
             margin-top: 50px;
@@ -48,13 +67,15 @@
             content: '❌';
         }
         .code-area {
+            display: flex;
+            justify-content: space-between;
             margin-top: 20px;
         }
-        .code-area textarea {
-            width: 100%;
-            height: 150px;
-            margin-bottom: 10px;
-            font-family: monospace;
+        .code-editor {
+            width: 48%;
+        }
+        .CodeMirror {
+            height: 200px;
             border-radius: 10px;
             border: 1px solid #ddd;
             padding: 10px;
@@ -177,8 +198,14 @@
             </div>
         </div>
         <div class="code-area">
-            <textarea id="htmlCode" class="form-control" placeholder="Введите HTML код здесь"></textarea>
-            <textarea id="cssCode" class="form-control" placeholder="Введите CSS код здесь"></textarea>
+            <div class="code-editor">
+                <h5>HTML код</h5>
+                <textarea id="htmlCode" class="form-control" placeholder="Введите HTML код здесь"></textarea>
+            </div>
+            <div class="code-editor">
+                <h5>CSS код</h5>
+                <textarea id="cssCode" class="form-control" placeholder="Введите CSS код здесь"></textarea>
+            </div>
         </div>
         <div class="preview">
             <iframe id="previewFrame" style="width: 100%; height: 100%;"></iframe>
@@ -188,15 +215,48 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closetag.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/html-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/css-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/xml-fold.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/foldcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/foldgutter.min.js"></script>
     <script>
         let currentStep = 1;
 
-        document.getElementById('htmlCode').addEventListener('input', updatePreview);
-        document.getElementById('cssCode').addEventListener('input', updatePreview);
+        const htmlEditor = CodeMirror.fromTextArea(document.getElementById('htmlCode'), {
+            mode: 'htmlmixed',
+            theme: 'material',
+            lineNumbers: true,
+            autoCloseTags: true,
+            autoCloseBrackets: true,
+            extraKeys: {"Ctrl-Space": "autocomplete"},
+            foldGutter: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+        });
+
+        const cssEditor = CodeMirror.fromTextArea(document.getElementById('cssCode'), {
+            mode: 'css',
+            theme: 'material',
+            lineNumbers: true,
+            autoCloseTags: true,
+            autoCloseBrackets: true,
+            extraKeys: {"Ctrl-Space": "autocomplete"},
+            foldGutter: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+        });
+
+        htmlEditor.on('change', updatePreview);
+        cssEditor.on('change', updatePreview);
 
         function updatePreview() {
-            const htmlCode = document.getElementById('htmlCode').value;
-            const cssCode = "<style>" + document.getElementById('cssCode').value + "</style>";
+            const htmlCode = htmlEditor.getValue();
+            const cssCode = "<style>" + cssEditor.getValue() + "</style>";
             const previewFrame = document.getElementById('previewFrame');
             const preview = previewFrame.contentDocument || previewFrame.contentWindow.document;
             preview.open();
@@ -208,16 +268,17 @@
 
         function checkTasksCompletion() {
             const tasks = [
-                { name: 'foundation', htmlCondition: /class="foundation"/, cssCondition: /\.foundation\s*\{[^}]*background-color:\s*#8B4513[^}]*\}/ },
-                { name: 'walls', htmlCondition: /class="walls"/, cssCondition: /\.walls\s*\{[^}]*background-color:\s*#D3D3D3[^}]*\}/ },
-                { name: 'roof', htmlCondition: /class="roof"/, cssCondition: /\.roof\s*\{[^}]*border-bottom:\s*100px\s*solid\s*#A52A2A[^}]*\}/ },
-                { name: 'door', htmlCondition: /class="door"/, cssCondition: /\.door\s*\{[^}]*background-color:\s*#A52A2A[^}]*\}/ }
+                { name: 'foundation', htmlCondition: /class="foundation"/, cssCondition: /\.foundation\s*\{[^}]*width:\s*100%;[^}]*height:\s*20px;[^}]*background-color:\s*#8B4513;[^}]*position:\s*absolute;[^}]*bottom:\s*0;[^}]*\}/ },
+                { name: 'walls', htmlCondition: /class="walls"/, cssCondition: /\.walls\s*\{[^}]*width:\s*200px;[^}]*height:\s*200px;[^}]*background-color:\s*#D3D3D3;[^}]*position:\s*absolute;[^}]*bottom:\s*20px;[^}]*left:\s*50%;[^}]*transform:\s*translateX\(-50%\);[^}]*border:\s*2px\s*solid\s*#000;[^}]*\}/ },
+                { name: 'roof', htmlCondition: /class="roof"/, cssCondition: /\.roof\s*\{[^}]*width:\s*0;[^}]*height:\s*0;[^}]*border-left:\s*110px\s*solid\s*transparent;[^}]*border-right:\s*110px\s*solid\s*transparent;[^}]*border-bottom:\s*100px\s*solid\s*#A52A2A;[^}]*position:\s*absolute;[^}]*top:\s*55px;[^}]*left:\s*50%;[^}]*transform:\s*translateX\(-50%\);[^}]*\}/ },
+                { name: 'door', htmlCondition: /class="door"/, cssCondition: /\.door\s*\{[^}]*width:\s*60px;[^}]*height:\s*100px;[^}]*background-color:\s*#A52A2A;[^}]*position:\s*absolute;[^}]*bottom:\s*20px;[^}]*left:\s*50%;[^}]*transform:\s*translateX\(-50%\);[^}]*border:\s*2px\s*solid\s*#000;[^}]*\}/ },
+                { name: 'doorknob', htmlCondition: /class="doorknob"/, cssCondition: /\.doorknob\s*\{[^}]*width:\s*10px;[^}]*height:\s*10px;[^}]*background-color:\s*#DAA520;[^}]*border-radius:\s*50%;[^}]*position:\s*absolute;[^}]*top:\s*50%;[^}]*right:\s*10px;[^}]*transform:\s*translateY\(-50%\);[^}]*\}/ }
             ];
 
             let completed = true;
             tasks.forEach((task, index) => {
-                const htmlCode = document.getElementById('htmlCode').value;
-                const cssCode = document.getElementById('cssCode').value;
+                const htmlCode = htmlEditor.getValue();
+                const cssCode = cssEditor.getValue();
                 const taskElement = document.querySelector(`.task[data-task="${task.name}"]`);
                 if (task.htmlCondition.test(htmlCode) && task.cssCondition.test(cssCode)) {
                     if (taskElement.classList.contains('not-completed')) {
@@ -255,6 +316,7 @@
                             <li>Нижний отступ: 20px (чтобы стены были над фундаментом)</li>
                             <li>Левый отступ: 50% (чтобы центрировать стены)</li>
                             <li>Трансформация: translateX(-50%) (чтобы центрировать стены по горизонтали)</li>
+                            <li>Граница: 2px solid #000 (чтобы добавить границу)</li>
                         </ul>
                         <button class="btn btn-secondary" onclick="showHint(2)">Показать помощь</button>
                         <button class="btn btn-secondary" onclick="hideHint(2)" style="display:none;">Скрыть помощь</button>
@@ -305,7 +367,7 @@
                     instructions.innerHTML = `
                         <h2>Шаг 4: Установить дверь</h2>
                         <p>Напишите HTML код для двери. Используйте элемент <code>&lt;div class="door"&gt;&lt;/div&gt; &lt;div class="doorknob"&gt;&lt;/div&gt;</code>.</p>
-                        <п>CSS должен содержать правила для:</п>
+                        <p>CSS должен содержать правила для:</p>
                         <ul>
                             <li>Ширина: 60px (ширина двери)</li>
                             <li>Высота: 100px (высота двери)</li>
@@ -314,6 +376,8 @@
                             <li>Нижний отступ: 20px (чтобы дверь была внизу стены)</li>
                             <li>Левый отступ: 50% (чтобы дверь была по центру стены)</li>
                             <li>Трансформация: translateX(-50%) (чтобы скорректировать положение двери по центру)</li>
+                            <li>Граница: 2px solid #000 (чтобы добавить границу)</li>
+                            <li>Ручка двери: ширина 10px, высота 10px, золотой цвет, круглая форма, позиционирование на двери</li>
                         </ul>
                         <button class="btn btn-secondary" onclick="showHint(4)">Показать помощь</button>
                         <button class="btn btn-secondary" onclick="hideHint(4)" style="display:none;">Скрыть помощь</button>
