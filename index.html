@@ -189,10 +189,7 @@
 
             let allocationResult = "";
             let remainingFunds = totalFunds;
-            for (let i = 1; i <= 4; i++) {
-                allocationResult += `Для предприятия ${i} выделить: ${allocation[i]} у.е.<br>`;
-                remainingFunds -= allocation[i];
-            }
+
 
             document.getElementById("result").innerHTML = `Максимальная суммарная прибыль: ${maxProfit.toFixed(2)} у.е.<br>${allocationResult}`;
             document.getElementById("result").style.display = "block";
