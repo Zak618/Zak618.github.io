@@ -1,202 +1,219 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Оптимизация прибыли предприятий</title>
+    <title>Оптимальная стратегия эксплуатации оборудования</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
             margin: 0;
             padding: 20px;
-            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        label, input, select {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            grid-column: span 2;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #results {
+            margin-top: 20px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin-top: 20px;
         }
         table, th, td {
-            border: 1px solid black;
+            border: 1px solid #ddd;
         }
         th, td {
             padding: 10px;
             text-align: center;
         }
-        input[type="number"] {
-            width: 80px;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .btn {
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #218838;
-        }
-        .result {
+        canvas {
             margin-top: 20px;
-            padding: 10px;
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
+            width: 100%;
+            height: 400px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Оптимизация прибыли предприятий</h1>
-        <p>Выберите вариант данных или введите свои данные:</p>
+        <h1>Оптимальная стратегия эксплуатации оборудования</h1>
+        <form id="inputForm">
+            <label for="t0">Возраст оборудования (t<sub>0</sub>):</label>
+            <input type="number" id="t0" name="t0" value="3" required>
+            
+            <label for="P">Стоимость нового оборудования (P):</label>
+            <input type="number" id="P" name="P" value="14" required>
 
-        <select id="variantSelect" onchange="populateData()">
-            <option value="var5">Вариант 5</option>
-            <option value="var6">Вариант 6</option>
-            <option value="custom">Свой вариант</option>
-        </select>
+            <label for="rValues">Прибыль r(t) (через запятую):</label>
+            <input type="text" id="rValues" name="rValues" value="8,7,7,7,6,4,3" required>
 
-        <h3>Таблица прибылей (gk(x))</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>x</th>
-                    <th>g1(x)</th>
-                    <th>g2(x)</th>
-                    <th>g3(x)</th>
-                    <th>g4(x)</th>
-                </tr>
-            </thead>
-            <tbody id="profitTable">
-                <!-- Данные будут автоматически заполняться или вводиться -->
-            </tbody>
-        </table>
+            <label for="sValues">Остаточная стоимость s(t) (через запятую):</label>
+            <input type="text" id="sValues" name="sValues" value="null,12,11,9,7,5,4" required>
 
-        <button class="btn" onclick="calculateMaxProfit()">Рассчитать максимальную прибыль</button>
+            <label for="preset">Или выберите готовый вариант:</label>
+            <select id="preset">
+                <option value="">Выберите вариант</option>
+                <option value="5">Вариант 5 (t0 = 2, P = 13)</option>
+                <option value="6">Вариант 6 (t0 = 3, P = 14)</option>
+            </select>
 
-        <div id="result" class="result" style="display: none;"></div>
+            <button type="submit">Рассчитать</button>
+        </form>
+
+        <div id="results"></div>
+        <canvas id="resultGraph"></canvas>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const data = {
-            var5: {
-                x: [0, 20, 40, 60, 80, 100],
-                g1: [0, 4.23, 7.76, 12.05, 15.58, 20.16],
-                g2: [0, 3.98, 8.05, 11.87, 16.12, 20.11],
-                g3: [0, 4.12, 7.69, 12.01, 16.03, 19.78],
-                g4: [0, 4.01, 7.98, 12.06, 15.99, 20.35]
-            },
-            var6: {
-                x: [0, 30, 60, 90, 120, 150],
-                g1: [0, 6.1, 12.3, 17.8, 23.7, 30.5],
-                g2: [0, 5.5, 11.7, 18.4, 24.7, 29.6],
-                g3: [0, 5.9, 12.1, 18.2, 24.3, 29.4],
-                g4: [0, 6.3, 11.8, 17.7, 23.6, 30.1]
+        document.getElementById('preset').addEventListener('change', function() {
+            if (this.value === '5') {
+                document.getElementById('t0').value = 2;
+                document.getElementById('P').value = 13;
+                document.getElementById('rValues').value = "12,12,9,6,5,4";
+                document.getElementById('sValues').value = "null,12,11,9,8,8";
+            } else if (this.value === '6') {
+                document.getElementById('t0').value = 3;
+                document.getElementById('P').value = 14;
+                document.getElementById('rValues').value = "8,7,7,7,6,4,3";
+                document.getElementById('sValues').value = "null,12,11,9,7,5,4";
             }
-        };
+        });
 
-        function populateData() {
-            const variant = document.getElementById('variantSelect').value;
-            const tableBody = document.getElementById('profitTable');
-            tableBody.innerHTML = '';
+        document.getElementById('inputForm').addEventListener('submit', function(event) {
+            event.preventDefault();
 
-            if (variant === 'custom') {
-                // Ввод пользовательских данных
-                for (let i = 0; i < 6; i++) {
-                    const row = `<tr>
-                        <td><input type="number" id="x${i}" value="0" /></td>
-                        <td><input type="number" id="g1_${i}" value="0" /></td>
-                        <td><input type="number" id="g2_${i}" value="0" /></td>
-                        <td><input type="number" id="g3_${i}" value="0" /></td>
-                        <td><input type="number" id="g4_${i}" value="0" /></td>
-                    </tr>`;
-                    tableBody.innerHTML += row;
+            // Получаем значения
+            const t0 = parseInt(document.getElementById('t0').value);
+            const P = parseInt(document.getElementById('P').value);
+            const rValues = document.getElementById('rValues').value.split(',').map(v => v === "null" ? null : parseInt(v));
+            const sValues = document.getElementById('sValues').value.split(',').map(v => v === "null" ? null : parseInt(v));
+
+            // Вычисляем стратегию
+            const result = calculateOptimalStrategy(t0, P, rValues, sValues);
+
+            // Выводим подробные расчеты и результаты
+            displayDetailedResults(result);
+
+            // Отрисовка графика
+            drawGraph(result);
+        });
+
+        function calculateOptimalStrategy(t0, P, rValues, sValues) {
+            let n = 4;  // число лет
+            let F = Array(n + 1).fill(0).map(() => Array(7).fill(0));  // Таблица Беллмана
+            let strategy = [];
+            let details = [];
+        
+            // Обратный ход по Беллману
+            for (let k = n; k >= 1; k--) {
+                let stepDetails = [];
+                for (let t = 1; t <= 6; t++) {
+                    let keep = rValues[t] + (k < n ? F[k + 1][t + 1] : 0);  // Сохранение
+                    let replace = (sValues[t] ? sValues[t] - P + rValues[0] : 0) + (k < n ? F[k + 1][1] : 0);  // Замена
+        
+                    F[k][t] = Math.max(keep, replace);  // Максимизация прибыли
+                    stepDetails.push({ year: k, age: t, keep, replace, best: F[k][t], action: F[k][t] === keep ? 'С' : 'З' });
                 }
-            } else {
-                // Заполнение предустановленными данными
-                const variantData = data[variant];
-                for (let i = 0; i < variantData.x.length; i++) {
-                    const row = `<tr>
-                        <td><input type="number" id="x${i}" value="${variantData.x[i]}" readonly /></td>
-                        <td><input type="number" id="g1_${i}" value="${variantData.g1[i]}" readonly /></td>
-                        <td><input type="number" id="g2_${i}" value="${variantData.g2[i]}" readonly /></td>
-                        <td><input type="number" id="g3_${i}" value="${variantData.g3[i]}" readonly /></td>
-                        <td><input type="number" id="g4_${i}" value="${variantData.g4[i]}" readonly /></td>
-                    </tr>`;
-                    tableBody.innerHTML += row;
+                details.push(stepDetails);
+        
+                // Определяем действие (замена или сохранение)
+                if (F[k][t0] === rValues[t0] + (k < n ? F[k + 1][t0 + 1] : 0)) {
+                    strategy.push('С');
+                } else {
+                    strategy.push('З');
                 }
             }
+        
+            let profit = F[1][t0];  // Максимальная прибыль на 1-м году, начиная с возраста t0
+            return { profit, strategy: strategy.reverse(), details: details.reverse() };
+        }
+        
+
+        function displayDetailedResults(result) {
+            let output = `<h2>Максимальная прибыль: ${result.profit} у.е.</h2>`;
+            output += `<p>Оптимальная стратегия: ${result.strategy.join(', ')}</p>`;
+
+            output += `<h3>Подробные расчеты:</h3>`;
+            result.details.forEach((step, index) => {
+                output += `<h4>Год ${index + 1}:</h4>`;
+                output += `<table><tr><th>Возраст</th><th>Прибыль при сохранении</th><th>Прибыль при замене</th><th>Лучший выбор</th><th>Действие</th></tr>`;
+                step.forEach(detail => {
+                    output += `<tr>
+                                <td>${detail.age}</td>
+                                <td>${detail.keep}</td>
+                                <td>${detail.replace}</td>
+                                <td>${detail.best}</td>
+                                <td>${detail.action}</td>
+                               </tr>`;
+                });
+                output += `</table>`;
+            });
+
+            document.getElementById('results').innerHTML = output;
         }
 
-        function calculateMaxProfit() {
-            const variant = document.getElementById('variantSelect').value;
-            let variantData = {
-                x: [],
-                g1: [],
-                g2: [],
-                g3: [],
-                g4: []
-            };
-
-            // Если пользователь выбрал "свой вариант", соберем данные из таблицы
-            if (variant === 'custom') {
-                for (let i = 0; i < 6; i++) {
-                    variantData.x.push(parseFloat(document.getElementById(`x${i}`).value));
-                    variantData.g1.push(parseFloat(document.getElementById(`g1_${i}`).value));
-                    variantData.g2.push(parseFloat(document.getElementById(`g2_${i}`).value));
-                    variantData.g3.push(parseFloat(document.getElementById(`g3_${i}`).value));
-                    variantData.g4.push(parseFloat(document.getElementById(`g4_${i}`).value));
-                }
-            } else {
-                // Иначе используем предустановленные данные
-                variantData = data[variant];
-            }
-
-            const totalFunds = variantData.x[variantData.x.length - 1]; // Максимальное значение средств (C1)
-
-            let memo = {};
-            let allocation = {};
-
-            function bellman(k, Ck) {
-                if (k === 4) {
-                    return variantData['g4'][variantData.x.indexOf(Ck)];
-                }
-
-                if (memo[`${k}_${Ck}`]) {
-                    return memo[`${k}_${Ck}`];
-                }
-
-                let maxProfit = 0;
-                let optimalXk = 0;
-                for (let xk = 0; xk <= Ck; xk += variantData.x[1] - variantData.x[0]) {
-                    const profit = variantData[`g${k}`][variantData.x.indexOf(xk)] + bellman(k + 1, Ck - xk);
-                    if (profit > maxProfit) {
-                        maxProfit = profit;
-                        optimalXk = xk;
+        function drawGraph(result) {
+            const ctx = document.getElementById('resultGraph').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Год 1', 'Год 2', 'Год 3', 'Год 4'],
+                    datasets: [{
+                        label: 'Оптимальная стратегия (возраст оборудования)',
+                        data: result.strategy.map(s => (s === 'С' ? 1 : 0)),  // Для графика
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Действие (Сохранить = 1, Заменить = 0)'
+                            }
+                        }
                     }
                 }
-
-                allocation[k] = optimalXk;
-                memo[`${k}_${Ck}`] = maxProfit;
-                return maxProfit;
-            }
-
-            const maxProfit = bellman(1, totalFunds);
-
-            let allocationResult = "";
-            let remainingFunds = totalFunds;
-
-
-            document.getElementById("result").innerHTML = `Максимальная суммарная прибыль: ${maxProfit.toFixed(2)} у.е.<br>${allocationResult}`;
-            document.getElementById("result").style.display = "block";
+            });
         }
-
-        // Автоматически заполняем данные для первого варианта при загрузке страницы
-        window.onload = populateData;
     </script>
 </body>
 </html>
