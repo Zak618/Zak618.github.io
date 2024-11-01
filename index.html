@@ -1,219 +1,202 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Оптимальная стратегия эксплуатации оборудования</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        label, input, select {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        button {
-            grid-column: span 2;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #results {
-            margin-top: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
-        canvas {
-            margin-top: 20px;
-            width: 100%;
-            height: 400px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Лидеры недели</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      padding: 20px;
+    }
+    .container {
+      text-align: center;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+      transition: box-shadow 0.3s;
+    }
+    .container:hover {
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+    h1 {
+      color: #333;
+      font-size: 1.8em;
+    }
+    .group-switcher {
+      margin: 15px 0;
+    }
+    .group-button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      background-color: #007bff;
+      transition: background-color 0.3s;
+    }
+    .group-button.active {
+      background-color: #0056b3;
+    }
+    .leader-info {
+      margin-top: 15px;
+    }
+
+    .leader-card {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      margin: 10px 0;
+      border: 2px solid gold;
+      border-radius: 10px;
+      background-color: #fffdf0;
+      box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
+      transition: transform 0.2s;
+    }
+    .leader-card:hover {
+      transform: scale(1.05);
+    }
+    .leader-icon {
+      color: gold;
+      font-size: 2em;
+      margin-right: 15px;
+    }
+    .leader-text {
+      text-align: left;
+      flex: 1;
+    }
+    .leader-text p {
+      margin: 4px 0;
+      font-size: 1.1em;
+      color: #555;
+    }
+    .leader-text p strong {
+      color: #333;
+      font-size: 1.2em;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+      h1 {
+        font-size: 1.5em;
+      }
+      .leader-card {
+        padding: 10px;
+      }
+      .leader-icon {
+        font-size: 1.5em;
+        margin-right: 10px;
+      }
+      .leader-text p {
+        font-size: 1em;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Оптимальная стратегия эксплуатации оборудования</h1>
-        <form id="inputForm">
-            <label for="t0">Возраст оборудования (t<sub>0</sub>):</label>
-            <input type="number" id="t0" name="t0" value="3" required>
-            
-            <label for="P">Стоимость нового оборудования (P):</label>
-            <input type="number" id="P" name="P" value="14" required>
+  <div class="container">
+    <h1>Лидеры недели <i class="fas fa-crown" style="color: gold;"></i></h1>
 
-            <label for="rValues">Прибыль r(t) (через запятую):</label>
-            <input type="text" id="rValues" name="rValues" value="8,7,7,7,6,4,3" required>
-
-            <label for="sValues">Остаточная стоимость s(t) (через запятую):</label>
-            <input type="text" id="sValues" name="sValues" value="null,12,11,9,7,5,4" required>
-
-            <label for="preset">Или выберите готовый вариант:</label>
-            <select id="preset">
-                <option value="">Выберите вариант</option>
-                <option value="5">Вариант 5 (t0 = 2, P = 13)</option>
-                <option value="6">Вариант 6 (t0 = 3, P = 14)</option>
-            </select>
-
-            <button type="submit">Рассчитать</button>
-        </form>
-
-        <div id="results"></div>
-        <canvas id="resultGraph"></canvas>
+    <div class="group-switcher">
+      <button class="group-button active" onclick="loadGroupData('ПИ-22-1', this)">ПИ-22-1</button>
+      <button class="group-button" onclick="loadGroupData('АИ-22', this)">АИ-22</button>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.getElementById('preset').addEventListener('change', function() {
-            if (this.value === '5') {
-                document.getElementById('t0').value = 2;
-                document.getElementById('P').value = 13;
-                document.getElementById('rValues').value = "12,12,9,6,5,4";
-                document.getElementById('sValues').value = "null,12,11,9,8,8";
-            } else if (this.value === '6') {
-                document.getElementById('t0').value = 3;
-                document.getElementById('P').value = 14;
-                document.getElementById('rValues').value = "8,7,7,7,6,4,3";
-                document.getElementById('sValues').value = "null,12,11,9,7,5,4";
+    <div id="leader-info" class="leader-info">
+      <p>Загрузка данных...</p>
+    </div>
+  </div>
+
+  <script>
+    async function loadGroupData(groupName, button) {
+      document.querySelectorAll('.group-button').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      const spreadsheetId = '1AEe8PtQyFNkaWAihYDQ6CuHi-79he0TQ5fCJ9yQIXlc';
+      const apiKey = 'AIzaSyBs7naRlg7gV_7aKVBvVBC7rz_4Svdxv7o'; // Ваш API-ключ
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${groupName}?key=${apiKey}`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Ошибка сети: ${response.status} - ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log(`Ответ от Google Sheets API для группы ${groupName}:`, data);
+
+        if (!data.values || data.values.length <= 1) {
+          console.warn("Данные не найдены или пустые.");
+          throw new Error("Данные не найдены или пустые.");
+        }
+
+        let maxScore = -1;
+        let leaders = [];
+
+        data.values.slice(1).forEach((row, index) => {
+          console.log(`Строка ${index + 1}:`, row);
+
+          if (row.length >= 11) {
+            const name = row[1];
+            const score = row[11].replace(',', '.');
+
+            const numericScore = parseFloat(score);
+            console.log(`Имя: ${name}, Итоговый балл: ${numericScore}`);
+
+            if (!isNaN(numericScore)) {
+              if (numericScore > maxScore) {
+                maxScore = numericScore;
+                leaders = [{ name, score: numericScore }];
+              } else if (numericScore === maxScore) {
+                leaders.push({ name, score: numericScore });
+              }
             }
+          } else {
+            console.warn(`Строка ${index + 1} пропущена, так как в ней недостаточно данных:`, row);
+          }
         });
 
-        document.getElementById('inputForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+        displayLeaders(leaders);
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error);
+        document.getElementById('leader-info').textContent = 'Ошибка загрузки данных';
+      }
+    }
 
-            // Получаем значения
-            const t0 = parseInt(document.getElementById('t0').value);
-            const P = parseInt(document.getElementById('P').value);
-            const rValues = document.getElementById('rValues').value.split(',').map(v => v === "null" ? null : parseInt(v));
-            const sValues = document.getElementById('sValues').value.split(',').map(v => v === "null" ? null : parseInt(v));
+    function displayLeaders(leaders) {
+      const leaderInfo = document.getElementById('leader-info');
+      leaderInfo.innerHTML = '';
 
-            // Вычисляем стратегию
-            const result = calculateOptimalStrategy(t0, P, rValues, sValues);
+      leaders.forEach(leader => {
+        const leaderCard = document.createElement('div');
+        leaderCard.className = 'leader-card';
 
-            // Выводим подробные расчеты и результаты
-            displayDetailedResults(result);
+        leaderCard.innerHTML = `
+          <i class="fas fa-crown leader-icon"></i>
+          <div class="leader-text">
+            <p><strong>${leader.name}</strong></p>
+            <p>Баллы: ${leader.score}</p>
+          </div>
+        `;
+        leaderInfo.appendChild(leaderCard);
+      });
+    }
 
-            // Отрисовка графика
-            drawGraph(result);
-        });
-
-        function calculateOptimalStrategy(t0, P, rValues, sValues) {
-            let n = 4;  // число лет
-            let F = Array(n + 1).fill(0).map(() => Array(7).fill(0));  // Таблица Беллмана
-            let strategy = [];
-            let details = [];
-        
-            // Обратный ход по Беллману
-            for (let k = n; k >= 1; k--) {
-                let stepDetails = [];
-                for (let t = 1; t <= 6; t++) {
-                    let keep = rValues[t] + (k < n ? F[k + 1][t + 1] : 0);  // Сохранение
-                    let replace = (sValues[t] ? sValues[t] - P + rValues[0] : 0) + (k < n ? F[k + 1][1] : 0);  // Замена
-        
-                    F[k][t] = Math.max(keep, replace);  // Максимизация прибыли
-                    stepDetails.push({ year: k, age: t, keep, replace, best: F[k][t], action: F[k][t] === keep ? 'С' : 'З' });
-                }
-                details.push(stepDetails);
-        
-                // Определяем действие (замена или сохранение)
-                if (F[k][t0] === rValues[t0] + (k < n ? F[k + 1][t0 + 1] : 0)) {
-                    strategy.push('С');
-                } else {
-                    strategy.push('З');
-                }
-            }
-        
-            let profit = F[1][t0];  // Максимальная прибыль на 1-м году, начиная с возраста t0
-            return { profit, strategy: strategy.reverse(), details: details.reverse() };
-        }
-        
-
-        function displayDetailedResults(result) {
-            let output = `<h2>Максимальная прибыль: ${result.profit} у.е.</h2>`;
-            output += `<p>Оптимальная стратегия: ${result.strategy.join(', ')}</p>`;
-
-            output += `<h3>Подробные расчеты:</h3>`;
-            result.details.forEach((step, index) => {
-                output += `<h4>Год ${index + 1}:</h4>`;
-                output += `<table><tr><th>Возраст</th><th>Прибыль при сохранении</th><th>Прибыль при замене</th><th>Лучший выбор</th><th>Действие</th></tr>`;
-                step.forEach(detail => {
-                    output += `<tr>
-                                <td>${detail.age}</td>
-                                <td>${detail.keep}</td>
-                                <td>${detail.replace}</td>
-                                <td>${detail.best}</td>
-                                <td>${detail.action}</td>
-                               </tr>`;
-                });
-                output += `</table>`;
-            });
-
-            document.getElementById('results').innerHTML = output;
-        }
-
-        function drawGraph(result) {
-            const ctx = document.getElementById('resultGraph').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Год 1', 'Год 2', 'Год 3', 'Год 4'],
-                    datasets: [{
-                        label: 'Оптимальная стратегия (возраст оборудования)',
-                        data: result.strategy.map(s => (s === 'С' ? 1 : 0)),  // Для графика
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        fill: false
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Действие (Сохранить = 1, Заменить = 0)'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    </script>
+    loadGroupData('ПИ-22-1', document.querySelector('.group-button.active'));
+  </script>
 </body>
 </html>
