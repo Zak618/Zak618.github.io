@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Браво — легенда</title>
+    <meta
+      name="description"
+      content="Ретро-футуристический сайт о группе Браво: треки, концерты, галерея."
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="icon" href="assets/img/logo.svg" />
+  </head>
+  <body>
+    <canvas id="mesh"></canvas>
+    <canvas id="grain"></canvas>
+    <header class="nav">
+      <div class="nav-inner">
+        <div style="display: flex; align-items: center; gap: 10px">
+          <img
+            src="assets/img/logo.svg"
+            alt="Браво"
+            height="26"
+            style="filter: drop-shadow(0 4px 10px rgba(0, 209, 255, 0.6))"
+          />
+        </div>
+        <nav class="nav">
+          <a href="#about">О группе</a>
+          <a href="#tracks">Треки</a>
+          <a href="#gallery">Галерея</a>
+          <a href="#concerts">Концерты</a>
+          <a href="#contacts">Контакты</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="section hero" id="home">
+        <div class="container hero-grid">
+          <div>
+            <h1 class="logo">Браво</h1>
+            <p>
+              Городские огни, рок-н-ролл и вечное лето — это музыка, которая
+              живёт в ритме «Браво».
+            </p>
+            <div class="hero-btns">
+              <a class="btn" href="#tracks">Слушать сейчас</a>
+              <a class="btn secondary" href="#concerts">Афиша</a>
+            </div>
+          </div>
+          <!-- Стационарный корпус плеера -->
+          <div class="player-body glass">
+            <div class="player-top">
+              <div class="screen">STEREO • 33⅓ RPM</div>
+              <div class="lights"><span></span><span></span><span></span></div>
+            </div>
+
+            <!-- Крутится только этот круг. Своё фото: поменяй url(...) ниже -->
+            <div class="disc"></div>
+
+            <div class="player-bottom">
+              <div class="slider"></div>
+              <div class="buttons"><i></i><i></i><i></i></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="about">
+        <div class="container">
+          <h2 class="section-title">О группе</h2>
+          <div class="about-grid">
+            <div class="card glass">
+              <span class="badge">История</span>
+              <p>
+                Группа «Браво» родилась в Москве в 1983 году, когда гитарист
+                Евгений Хавтан решил вернуть в музыку стиль, драйв и
+                элегантность 50–60-х. В разные годы с коллективом выступали
+                Жанна Агузарова, Валерий Сюткин и Роберт Ленц — каждый внёс свою
+                эпоху в легенду.
+              </p>
+              <p>
+                С тех пор «Браво» остаётся символом живого рока и бесконечного
+                праздника — группы, которая умеет звучать модно в любое
+                десятилетие.
+              </p>
+            </div>
+
+            <div class="card glass">
+              <span class="badge">Эстетика</span>
+              <p>
+                Это не просто музыка — это стиль. Неон, винил, блеск, ритм,
+                городские огни. «Браво» соединяет джаз, твист и синтвейв,
+                сохраняя лёгкость и шарм классики.
+              </p>
+              <p>
+                Их сцена — как ретро-приёмник будущего: яркая, стильная и всегда
+                в ритме любви.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="tracks">
+        <div class="container">
+          <h2 class="section-title">Видео</h2>
+
+          <div class="video-grid">
+            <div class="video glass">
+              <div class="ratio">
+                <iframe
+                  src="https://vkvideo.ru/video_ext.php?oid=-6664902&id=456239564&hd=2&autoplay=0"
+                  allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+                  loading="lazy"
+                  frameborder="0"
+                  allowfullscreen
+                  title="Видео 1"
+                ></iframe>
+              </div>
+            </div>
+
+            <div class="video glass">
+              <div class="ratio">
+                <iframe
+                  src="https://vkvideo.ru/video_ext.php?oid=-6664902&id=456239295&hd=2&autoplay=0"
+                  allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+                  loading="lazy"
+                  frameborder="0"
+                  allowfullscreen
+                  title="Видео 2"
+                ></iframe>
+              </div>
+            </div>
+
+            <div class="video glass">
+              <div class="ratio">
+                <iframe
+                  src="https://vkvideo.ru/video_ext.php?oid=-6664902&id=456239253&hd=2&autoplay=0"
+                  allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+                  loading="lazy"
+                  frameborder="0"
+                  allowfullscreen
+                  title="Видео 3"
+                ></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="gallery">
+        <div class="container">
+          <h2 class="section-title">Галерея</h2>
+          <div class="gallery-grid">
+            <div class="g glass">
+              <img
+                src="https://pic.rutubelist.ru/userappearance/2024-09-24/93/7c/937ca8478f426a1d95d5ed1c3da07714.jpeg"
+                data-lightbox="https://pic.rutubelist.ru/userappearance/2024-09-24/93/7c/937ca8478f426a1d95d5ed1c3da07714.jpeg"
+                alt="Фото 1"
+              />
+            </div>
+            <div class="g glass">
+              <img
+                src="https://avatars.mds.yandex.net/i?id=ee79924c059df8c5638b4f7fead908dc_l-3986150-images-thumbs&n=13"
+                data-lightbox="https://avatars.mds.yandex.net/i?id=ee79924c059df8c5638b4f7fead908dc_l-3986150-images-thumbs&n=13"
+                alt="Фото 2"
+              />
+            </div>
+            <div class="g glass">
+              <img
+                src="https://pg21.ru/userfiles/picfullsize/img-43964-15032273498951.jpg"
+                data-lightbox="https://pg21.ru/userfiles/picfullsize/img-43964-15032273498951.jpg"
+                alt="Фото 3"
+              />
+            </div>
+            <div class="g glass">
+              <img
+                src="https://img.rl0.ru/afisha/e1200x1200i/daily.afisha.ru/uploads/images/f/0e/f0e8ce7c5d1fe9dfa28b89f9a22e1b8f.png"
+                data-lightbox="https://img.rl0.ru/afisha/e1200x1200i/daily.afisha.ru/uploads/images/f/0e/f0e8ce7c5d1fe9dfa28b89f9a22e1b8f.png"
+                alt="Фото 4"
+              />
+            </div>
+            <div class="g glass">
+              <img
+                src="https://i.ytimg.com/vi/P7S1LyJP1Ko/maxresdefault.jpg"
+                data-lightbox="https://i.ytimg.com/vi/P7S1LyJP1Ko/maxresdefault.jpg"
+                alt="Фото 5"
+              />
+            </div>
+            <div class="g glass">
+              <img
+                src="https://ts1.mm.bing.net/th?id=OIP.SgisvODEewNQLu26mKY3zAHaHE&pid=15.1"
+                data-lightbox="https://ts1.mm.bing.net/th?id=OIP.SgisvODEewNQLu26mKY3zAHaHE&pid=15.1"
+                alt="Фото 6"
+              />
+            </div>
+            <div class="g glass">
+              <img
+                src="https://cdn1.ozone.ru/s3/multimedia-1/c600/6244322929.jpg"
+                data-lightbox="https://cdn1.ozone.ru/s3/multimedia-1/c600/6244322929.jpg"
+                alt="Фото 7"
+              />
+            </div>
+            <div class="g glass">
+              <img
+                src="https://avatars.mds.yandex.net/i?id=8bd5114b2e19fc013c2739e9494aa5bf_l-15439472-images-thumbs&n=13"
+                data-lightbox="https://avatars.mds.yandex.net/i?id=8bd5114b2e19fc013c2739e9494aa5bf_l-15439472-images-thumbs&n=13"
+                alt="Фото 8"
+              />
+            </div>
+            <div class="g glass">
+              <img
+                src="https://sun9-54.userapi.com/impg/o8Z9_fKZ4KiEGhzdYLZ2F9hwpaZn_pGmaaBQvg/xLS2bCaRcJY.jpg?size=1000x667&quality=95&sign=11fe42bf7a68101c42fcd1c4c9640ce8&c_uniq_tag=H7081Ba-uYNRT8vm6gejdrKA1iVEV_2BPVABRIBR7Uo&type=album"
+                data-lightbox="https://sun9-54.userapi.com/impg/o8Z9_fKZ4KiEGhzdYLZ2F9hwpaZn_pGmaaBQvg/xLS2bCaRcJY.jpg?size=1000x667&quality=95&sign=11fe42bf7a68101c42fcd1c4c9640ce8&c_uniq_tag=H7081Ba-uYNRT8vm6gejdrKA1iVEV_2BPVABRIBR7Uo&type=album"
+                alt="Фото 9"
+              />
+            </div>
+            <div class="g glass">
+              <img
+                src="https://img-fotki.yandex.ru/get/194549/191486894.f64/0_1e048d_e52fff47_XXL.jpg"
+                data-lightbox="https://img-fotki.yandex.ru/get/194549/191486894.f64/0_1e048d_e52fff47_XXL.jpg"
+                alt="Фото 10"
+              />
+            </div>
+            <div class="g glass">
+              <img
+                src="https://avatars.mds.yandex.net/i?id=922d80e52987c9536c28b8a8b92a45fcfd5b97d3-17981206-images-thumbs&n=13"
+                data-lightbox="https://avatars.mds.yandex.net/i?id=922d80e52987c9536c28b8a8b92a45fcfd5b97d3-17981206-images-thumbs&n=13"
+                alt="Фото 11"
+              />
+            </div>
+            <div class="g glass">
+              <img
+                src="https://reproduktor.net/wp-content/uploads/2021/08/lenz.jpg"
+                data-lightbox="https://reproduktor.net/wp-content/uploads/2021/08/lenz.jpg"
+                alt="Фото 12"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="lightbox" id="lightbox">
+          <div class="inner"><img src="" alt="" /></div>
+        </div>
+      </section>
+
+      <section class="section" id="concerts">
+        <div class="container">
+          <h2 class="section-title">Концерты</h2>
+          <div class="marquee glass">
+            <div class="row">
+              <span>Алматы • 25 ноя • 2025 • Дворец Республики</span>
+              <span>Астана • 16 ноя • 2025 • Конгресс-Центр</span>
+              <span>Москва • 20 ноя • 2025 • Atmosphere</span>
+              <span>Санкт-Петербург • 29 ноя • 2025 • Sound</span>
+            </div>
+          </div>
+          <div class="concerts-grid">
+            <div class="concert glass">
+              <div class="date">25 ноября • 20:00</div>
+              <div class="city">Алматы</div>
+              <div class="place">Дворец Республики</div>
+              <a class="btn" href="#">Билеты</a>
+            </div>
+            <div class="concert glass">
+              <div class="date">20 ноября • 20:00</div>
+              <div class="city">Москва</div>
+              <div class="place">Atmosphere</div>
+              <a class="btn secondary" href="#">Билеты</a>
+            </div>
+            <div class="concert glass">
+              <div class="date">29 ноября • 20:00</div>
+              <div class="city">Санкт-Петербург</div>
+              <div class="place">Sound</div>
+              <a class="btn" href="#">Билеты</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="contacts">
+        <div class="container">
+          <h2 class="section-title">Контакты</h2>
+          <div
+            class="card glass"
+            style="
+              padding: 24px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 18px;
+              flex-wrap: wrap;
+            "
+          >
+            <div>
+              <div
+                style="font-size: 18px; font-weight: 700; margin-bottom: 6px"
+              >
+                По вопросам концертов и сотрудничества
+              </div>
+              <div style="color: #cbd5e1">bravo@mail.ru • +7 900 000-00-00</div>
+            </div>
+            <div class="socials">
+              <a href="https://youtube.com" target="_blank" aria-label="YouTube"
+                >▶</a
+              >
+              <a
+                href="https://open.spotify.com"
+                target="_blank"
+                aria-label="Spotify"
+                >♫</a
+              >
+              <a href="https://vk.com" target="_blank" aria-label="VK">VK</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>Сделано с любовью к Браво. Неофициальный фан-сайт. © Браво</footer>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
